@@ -41,3 +41,13 @@ class User(db.Model, SerializerMixin):
         return value
     def __repr__(self):
         return f'<User: {self.id}, {self.username}, {self.email}>'
+
+class Organization(db.Model, SerializerMixin):
+    __tablename__ = 'organizations'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    name = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    
+    events = db.relationship('Event', back_populates='organization', cascade='all, delete-orphan', lazy='dynamic')
