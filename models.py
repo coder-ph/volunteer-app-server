@@ -51,3 +51,21 @@ class Organization(db.Model, SerializerMixin):
     location = db.Column(db.String, nullable=False)
     
     events = db.relationship('Event', back_populates='organization', cascade='all, delete-orphan', lazy='dynamic')
+    
+class Event(db.Model, SerializerMixin):
+    __tablename__ = 'events'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    title = db.Column(db.String, nullable=False)
+    location = db.Column(db.String, nullable=False)
+    description = db.Column(db.String, nullable=False)
+    org_id = db.Column(db.Integer, db.ForeignKey('organizations.id'))
+    created_at =  db.Column(db.DateTime, server_default = db.func.now())
+    updated_at = db.Column(db.DateTime, onupdate=db.func.now())
+    
+    rsvps = db.relationship('Rsvp', back_populates='event', lazy='dynamic', cascade='all, delete-orphan')
+    organization = db.relationship('Organization', back_populates='events')
+    
+    def __repr__(self):
+        return f'<Event: {self.title}, {self.location}, {self.description}, {self.org_id}>'
+    
