@@ -69,3 +69,24 @@ class Event(db.Model, SerializerMixin):
     def __repr__(self):
         return f'<Event: {self.title}, {self.location}, {self.description}, {self.org_id}>'
     
+class Rsvp(db.Model, SerializerMixin):
+    __tablename__ = 'rsvps'
+    
+    id = db.Column(db.Integer, primary_key=True)
+    status = db.Column(db.Enum('Attending', 'Not attending'), nullable=False) #attending or not
+    user_id = db.Column(db.Integer, db.ForeignKey('users.id'))
+    event_id = db.Column(db.Integer, db.ForeignKey('events.id'))
+    
+    user = db.relationship('User', back_populates='rsvps')
+    event = db.relationship('Event', back_populates='rsvps')
+    
+    @validates('status')
+    def validate_status(self, key, value):
+        status =['Attending', 'Not attending']
+        if  value in status:
+            return value
+        else:
+            raise ValueError ('status can only be attending or not attending')
+        
+    def __repr__(self):
+        return f'<Rsvp: {self.id}, {self.status}, User: {self.user_id}, Event: {self.event_id}>'
