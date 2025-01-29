@@ -6,10 +6,10 @@ from models import Organization, User, Event, Rsvp, db
 fake = Faker()
 with app.app_context():
     
-    Organization.query.delete()
-    Rsvp.query.delete()
-    Event.query.delete()
-    User.query.delete()
+    # Organization.query.delete()
+    # Rsvp.query.delete()
+    # Event.query.delete()
+    # User.query.delete()
     
     organizations = []
     for _ in range(5):  
@@ -34,11 +34,13 @@ with app.app_context():
     
     # Seed events
     events = []
+    
     for _ in range(10):  
         event = Event(
             title=fake.catch_phrase(),
             location=fake.city(),
             description=fake.text(max_nb_chars=200),
+            date = fake.date(),
             org_id=rc(range(5)) 
         )
         events.append(event)

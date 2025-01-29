@@ -10,6 +10,7 @@ db = SQLAlchemy(metadata=metadata)
 
 class User(db.Model, SerializerMixin):
     __tablename__ = 'users'
+    serialize_rules = ('rsvps', '-created_at', '-updated_at', 'rsvps.status')
     
     id = db.Column(db.Integer, primary_key=True)
     username = db.Column(db.String, nullable=False)
@@ -44,6 +45,7 @@ class User(db.Model, SerializerMixin):
 
 class Organization(db.Model, SerializerMixin):
     __tablename__ = 'organizations'
+    serialize_rules = ('-events', '-events.created_at', 'events.updated_at')
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -54,11 +56,13 @@ class Organization(db.Model, SerializerMixin):
     
 class Event(db.Model, SerializerMixin):
     __tablename__ = 'events'
+    serialize_rules=('-rsvps', 'organization.name', '-updated_at', '-created_at')
     
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
+    date=db.Column(db.String, nullable=False)
     org_id = db.Column(db.Integer, db.ForeignKey('organizations.id'))
     created_at =  db.Column(db.DateTime, server_default = db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())
@@ -71,6 +75,8 @@ class Event(db.Model, SerializerMixin):
     
 class Rsvp(db.Model, SerializerMixin):
     __tablename__ = 'rsvps'
+    
+    serialize_rules= ('-user', '-event')
     
     id = db.Column(db.Integer, primary_key=True)
     status = db.Column(db.Enum('Attending', 'Not attending'), nullable=False) #attending or not

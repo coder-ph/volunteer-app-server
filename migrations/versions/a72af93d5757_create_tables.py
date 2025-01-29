@@ -1,8 +1,8 @@
 """create tables
 
-Revision ID: d61324f4cf6f
+Revision ID: a72af93d5757
 Revises: 
-Create Date: 2025-01-28 09:59:15.230732
+Create Date: 2025-01-29 17:39:57.322353
 
 """
 from alembic import op
@@ -10,7 +10,7 @@ import sqlalchemy as sa
 
 
 # revision identifiers, used by Alembic.
-revision = 'd61324f4cf6f'
+revision = 'a72af93d5757'
 down_revision = None
 branch_labels = None
 depends_on = None
@@ -29,9 +29,9 @@ def upgrade():
     sa.Column('id', sa.Integer(), nullable=False),
     sa.Column('username', sa.String(), nullable=False),
     sa.Column('email', sa.String(), nullable=False),
-    sa.Column('role', sa.Enum(), nullable=False),
-    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=False),
-    sa.Column('updated_at', sa.DateTime(), nullable=False),
+    sa.Column('role', sa.Enum('organization', 'volunteer'), nullable=False),
+    sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
+    sa.Column('updated_at', sa.DateTime(), nullable=True),
     sa.PrimaryKeyConstraint('id'),
     sa.UniqueConstraint('email')
     )
@@ -40,6 +40,7 @@ def upgrade():
     sa.Column('title', sa.String(), nullable=False),
     sa.Column('location', sa.String(), nullable=False),
     sa.Column('description', sa.String(), nullable=False),
+    sa.Column('date', sa.String(), nullable=False),
     sa.Column('org_id', sa.Integer(), nullable=True),
     sa.Column('created_at', sa.DateTime(), server_default=sa.text('(CURRENT_TIMESTAMP)'), nullable=True),
     sa.Column('updated_at', sa.DateTime(), nullable=True),
@@ -48,7 +49,7 @@ def upgrade():
     )
     op.create_table('rsvps',
     sa.Column('id', sa.Integer(), nullable=False),
-    sa.Column('status', sa.Enum(), nullable=True),
+    sa.Column('status', sa.Enum('Attending', 'Not attending'), nullable=False),
     sa.Column('user_id', sa.Integer(), nullable=True),
     sa.Column('event_id', sa.Integer(), nullable=True),
     sa.ForeignKeyConstraint(['event_id'], ['events.id'], ),
