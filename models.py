@@ -45,7 +45,7 @@ class User(db.Model, SerializerMixin):
 
 class Organization(db.Model, SerializerMixin):
     __tablename__ = 'organizations'
-    serialize_rules = ('-events', '-events.created_at', 'events.updated_at')
+    serialize_rules = ('-events', )
     
     id = db.Column(db.Integer, primary_key=True)
     name = db.Column(db.String, nullable=False)
@@ -56,7 +56,7 @@ class Organization(db.Model, SerializerMixin):
     
 class Event(db.Model, SerializerMixin):
     __tablename__ = 'events'
-    serialize_rules=('-rsvps', 'organization.name', '-updated_at', '-created_at')
+    serialize_rules=('-rsvps', '-organization','-updated_at', '-created_at', 'organization.name',)
     
     id = db.Column(db.Integer, primary_key=True)
     title = db.Column(db.String, nullable=False)

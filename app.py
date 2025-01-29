@@ -4,6 +4,7 @@ from flask import Flask, request, jsonify, make_response, session
 from flask_restful import Api, Resource
 from models import Organization, User, Event, Rsvp, db
 from flask_cors import CORS
+from sqlalchemy.orm import joinedload
 
 app = Flask(__name__)
 app.config["SQLALCHEMY_DATABASE_URI"] = 'sqlite:///app.db'
@@ -107,7 +108,7 @@ class OrganizationDetails(Resource):
         )
 class Events(Resource):
     def get(self):
-        events = db.session.query(Event).all()
+        events = Event.query.options(joinedload(Event.organization)).all()
         if not len(events):
             return make_response(
                 [],
