@@ -62,7 +62,7 @@ class Event(db.Model, SerializerMixin):
     title = db.Column(db.String, nullable=False)
     location = db.Column(db.String, nullable=False)
     description = db.Column(db.String, nullable=False)
-    date=db.Column(db.String, nullable=False)
+    date=db.Column(db.String)
     org_id = db.Column(db.Integer, db.ForeignKey('organizations.id'))
     created_at =  db.Column(db.DateTime, server_default = db.func.now())
     updated_at = db.Column(db.DateTime, onupdate=db.func.now())

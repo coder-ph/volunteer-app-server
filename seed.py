@@ -6,13 +6,13 @@ from models import Organization, User, Event, Rsvp, db
 fake = Faker()
 with app.app_context():
     
-    # Organization.query.delete()
-    # Rsvp.query.delete()
-    # Event.query.delete()
-    # User.query.delete()
+    Organization.query.delete()
+    Rsvp.query.delete()
+    Event.query.delete()
+    User.query.delete()
     
     organizations = []
-    for _ in range(5):  
+    for _ in range(20):  
         org = Organization(
             name=fake.company(),
             description=fake.catch_phrase(),
@@ -23,7 +23,7 @@ with app.app_context():
     
     # Seed users
     users = []
-    for _ in range(10):  
+    for _ in range(20):  
         user = User(
             username=fake.user_name(),
             email=fake.email(),
@@ -35,7 +35,7 @@ with app.app_context():
     # Seed events
     events = []
     
-    for _ in range(10):  
+    for _ in range(20):  
         event = Event(
             title=fake.catch_phrase(),
             location=fake.city(),
@@ -47,7 +47,7 @@ with app.app_context():
         db.session.add(event)
     
     # Seed RSVPs
-    for _ in range(15):  
+    for _ in range(20):  
         rsvp = Rsvp(
             status=rc(['Attending', 'Not attending']),  
             user_id=rc(range(10)),  

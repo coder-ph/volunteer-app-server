@@ -121,7 +121,7 @@ class Events(Resource):
         
     def post(self):
         data = request.get_json()
-        required_fields = ['title', 'location', 'description', 'org_id']
+        required_fields = ['title', 'location', 'description', 'date','org_id']
         missing_fields =[fields for fields in required_fields if fields not in data or not data[fields]]
         if missing_fields:
             return make_response(
@@ -133,8 +133,9 @@ class Events(Resource):
         location = data.get('location')
         description = data.get('description')
         org_id = data.get('org_id')
+        date = data.get('date')
         
-        new_event = Event(title=title, location=location, description=description, org_id=org_id)
+        new_event = Event(title=title, location=location, description=description, date=date, org_id=org_id)
         db.session.add(new_event)
         db.session.commit()
         
@@ -144,19 +145,19 @@ class Events(Resource):
         )
 class Eventdetail(Resource):
     def get(self, id):
-        event = db.session.query(Event).get(id)
+        event = db.session.get(Event, id)
         if not event:
             return make_response(
                 {'message': 'event not found'},
                 404
             )
         return make_response(
-            event,
+            event.to_dict(),
             200
         ) 
         
-    def post(self, id):
-        event = db.session.query(Event).get(id)
+    def patch(self, id):
+        event = db.session.get(Event, id)
         if not event:
             return make_response(
                 {'message': 'event not found'},
@@ -186,7 +187,7 @@ class Eventdetail(Resource):
         )
              
     def delete(self, id):
-        event = db.session.query(Event).get(id)
+        event = db.session.get(Event, id)
         if not event:
             return make_response(
                 {'message': 'event not found'},
